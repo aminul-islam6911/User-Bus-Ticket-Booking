@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FBBB5B"
+    android:padding="10dp"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/lgbus" />
+
+    <Button
+        android:id="@+id/btnBuy"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/img"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/aclonica"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Buy Now"
+        android:textAllCaps="false"
+        android:textColor="#FFF0C3"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btnBook"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/btnBuy"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/aclonica"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="Book"
+        android:textAllCaps="false"
+        android:textColor="#FFF0C3"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btnTickets"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/btnBook"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/aclonica"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="Tickets"
+        android:textAllCaps="false"
+        android:textColor="#FFF0C3"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btnSignOut"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/btnTickets"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/aclonica"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="Sign Out"
+        android:textAllCaps="false"
+        android:textColor="#FFF0C3"
+        android:textSize="30sp" />
+
+</RelativeLayout>

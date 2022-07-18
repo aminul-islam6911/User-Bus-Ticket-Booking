@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "543125888785",
+    "firebase_url": "https://final-bus-ticket-booking-default-rtdb.firebaseio.com",
+    "project_id": "final-bus-ticket-booking",
+    "storage_bucket": "final-bus-ticket-booking.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543125888785:android:d6fd1d16c42ade8a8e76b0",
+        "android_client_info": {
+          "package_name": "com.example.adminbusticketbookingsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "543125888785-rql2f4ef61q4uv51pkmn9ibbprsl5tcb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPa29N7Y_Jifbex_WsqJm5Tj982fanHoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "543125888785-rql2f4ef61q4uv51pkmn9ibbprsl5tcb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543125888785:android:3697cf8b5ea0400f8e76b0",
+        "android_client_info": {
+          "package_name": "com.example.userbusticketbookingsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "543125888785-rql2f4ef61q4uv51pkmn9ibbprsl5tcb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPa29N7Y_Jifbex_WsqJm5Tj982fanHoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "543125888785-rql2f4ef61q4uv51pkmn9ibbprsl5tcb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
