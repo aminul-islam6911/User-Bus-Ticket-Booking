@@ -1,9 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BookActivity">
+    android:padding="5dp"
+    android:background="#FBBB5B"
+    tools:context=".MainActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/MN_Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/edit_box"
+        android:gravity="center"
+        android:text=""
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        android:textStyle="italic" />
+
+    <RelativeLayout
+        android:id="@+id/SpinnerLayouts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/MN_Name"
+        android:layout_marginTop="15dp">
+
+        <TextView
+            android:id="@+id/MN_TextLcStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Select Starting Location"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            android:id="@+id/MN_Location_Place_Start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/MN_TextLcStart"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="150dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"
+            android:textAlignment="center" />
+
+
+        <TextView
+            android:id="@+id/MN_TextLcEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/MN_Location_Place_Start"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:text="Select Destination Location"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            android:id="@+id/MN_Location_Place_Destination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/MN_TextLcEnd"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="150dp"
+            android:layout_marginBottom="5dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/MN_Select_date"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SpinnerLayouts"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button"
+        android:padding="5dp"
+        android:text="Select Date"
+        android:textAllCaps="false"
+        android:textColor="#FFF0C3"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/MN_Search"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/MN_Select_date"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button"
+        android:padding="5dp"
+        android:text="Search"
+        android:textAllCaps="false"
+        android:textColor="#FFF0C3"
+        android:textSize="20sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/MNblload"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@+id/MN_Search"
+        android:layout_marginTop="10dp" />
+
+</RelativeLayout>

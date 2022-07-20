@@ -26,8 +26,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -45,7 +47,7 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
     private TextView Tx_Name, MN_Select_date;
     private Button Confirm;
     private ProgressDialog progressDialog;
-    private String dbEveryday, Final;
+    private String dbEveryday, currentDate;
     private RecyclerView MNblload;
     private GridLayoutManager gridLayoutManager;
     private String ArrivalAd, DepartureAd;
@@ -54,7 +56,6 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy);
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         Initialize();
         TextView_Name();
         FirebaseDataRetrieve();
@@ -64,6 +65,7 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
             public void onClick(View v) {
                 if (ArrivalAd.equals(DepartureAd)) {
                     Toast.makeText(BuyActivity.this, "Location is repeated", Toast.LENGTH_SHORT).show();
+                    MNblload.setVisibility(View.GONE);
                 } else {
                     Searching();
                 }
@@ -74,8 +76,9 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
     @Override
     protected void onStart() {
         super.onStart();
-        Final = new SimpleDateFormat("dd/LLL/yyyy", Locale.getDefault()).format(new Date());
-        MN_Select_date.setText(Final);
+        Calendar calendar = Calendar.getInstance();
+        currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+        MN_Select_date.setText(currentDate);
     }
 
     private void Initialize() {
@@ -183,7 +186,6 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
     }
 
     public void Searching() {
-        if (!Final.equals("Empty")) {
             dbEveryday = "Runs Everyday" + " " + DepartureAd + " " + ArrivalAd;
             loadbus = FirebaseDatabase.getInstance().getReference().child("Schedule").child(dbEveryday);
             FirebaseRecyclerAdapter<BusModel, loadView> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BusModel, loadView>(
@@ -224,7 +226,7 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
                                     in.putExtra("ArrivalTime", ArrivalTime);
                                     in.putExtra("StartingTime", StartingTime);
                                     in.putExtra("BusNo", BusNo);
-                                    in.putExtra("Date", Final);
+                                    in.putExtra("Date", currentDate);
                                     in.putExtra("NumberOfSeat", NoOfSit);
                                     in.putExtra("BusType", BusType);
                                     in.putExtra("Starting", Start);
@@ -243,8 +245,6 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
                 }
             };
             MNblload.setAdapter(firebaseRecyclerAdapter);
-        } else {
-            Toast.makeText(this, "No Bus Available", Toast.LENGTH_SHORT).show();
-        }
+            MNblload.setVisibility(View.VISIBLE);
     }
 }
