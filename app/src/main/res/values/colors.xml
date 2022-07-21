@@ -10,4 +10,5 @@
     <color name="deepRed">#201377</color>
     <color name="transparentRed">#48F44336</color>
     <color name="MiddleRed">#A1F44336</color>
+    <color name="But_bg">#FFF0C3</color>
 </resources>
