@@ -186,8 +186,8 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
     }
 
     public void Searching() {
-            dbEveryday = "Runs Everyday" + " " + DepartureAd + " " + ArrivalAd;
-            loadbus = FirebaseDatabase.getInstance().getReference().child("Schedule").child(dbEveryday);
+            dbEveryday = DepartureAd + " " + ArrivalAd;
+            loadbus = FirebaseDatabase.getInstance().getReference().child("Buses").child(dbEveryday);
             FirebaseRecyclerAdapter<BusModel, loadView> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BusModel, loadView>(
                     BusModel.class,
                     R.layout.bus_view,
@@ -204,14 +204,12 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
                             final String ArrivalTime = dataSnapshot.child("ArrivalTime").getValue().toString();
                             final String Start = dataSnapshot.child("Start").getValue().toString();
                             final String BusNo = dataSnapshot.child("BusNo").getValue().toString();
-                            final String Date = dataSnapshot.child("Date").getValue().toString();
                             final String StartingTime = dataSnapshot.child("StartingTime").getValue().toString();
                             final String BusType = dataSnapshot.child("BusType").getValue().toString();
                             final String NoOfSit = dataSnapshot.child("NumberOfSeat").getValue().toString();
                             final String Ticketprice = dataSnapshot.child("TicketPrice").getValue().toString();
 
                             viewHolder.settextBusno(BusNo);
-                            viewHolder.settextDate(Date);
                             viewHolder.settextLocationEnd(ArrivalAd);
                             viewHolder.settextLocationStart(DepartureAd);
                             viewHolder.settextSeatType(BusType);

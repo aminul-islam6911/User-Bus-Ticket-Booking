@@ -1,8 +1,5 @@
 package com.example.userbusticketbookingsystem;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +11,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BookTicket extends AppCompatActivity {
     private TextView tvBusNo, tvDate, tvStarting, tvDestination, tvStartingTime, tvArrivalTime,
@@ -37,8 +39,10 @@ public class BookTicket extends AppCompatActivity {
     int noOfSeats;
     EditText edtTraveller;
     ListView listView;
-    ArrayList<String> arrayList;
+    public static ArrayList<String> arrayList;
     ArrayAdapter<String> adapter;
+    Timer timer;
+    public static TimerTask timerTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +66,11 @@ public class BookTicket extends AppCompatActivity {
         btnConfirmBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (!arrayList.isEmpty()) {
                     GetNoOfPSeat();
-                    BookTickets();
+                    TimerStart();
+                    Intent in = new Intent(BookTicket.this, Payment.class);
+                    startActivity(in);
                 } else {
                     Toast.makeText(BookTicket.this, "Please select some places", Toast.LENGTH_LONG).show();
                 }
@@ -98,8 +103,8 @@ public class BookTicket extends AppCompatActivity {
         stSeatAvailable = getIntent().getStringExtra("NumberOfSeat");
         stBusType = getIntent().getStringExtra("BusType");
         stTicketPrice = getIntent().getStringExtra("Price");
-        seatNoRef = "Runs Everyday " + stStarting + " " + stDestination;
-        seatsNo = FirebaseDatabase.getInstance().getReference().child("Schedule")
+        seatNoRef = stStarting + " " + stDestination;
+        seatsNo = FirebaseDatabase.getInstance().getReference().child("Buses")
                 .child(seatNoRef).child(stBusNo);
     }
 
@@ -110,11 +115,57 @@ public class BookTicket extends AppCompatActivity {
         tvDestination.setText("To :" + stDestination);
         tvStartingTime.setText("Starting Time :" + stStartingTime);
         tvArrivalTime.setText("Arrival Time :" + stArrivalTime);
-        tvSeatAvailable.setText("Seat Available :" + stSeatAvailable);
+        tvSeatAvailable.setText(stSeatAvailable);
         tvBusType.setText("Bus Type :" + stBusType);
         btnConfirmBooking.setText("Confirm(" + stTicketPrice + " Tk)");
         Toast.makeText(BookTicket.this, stTicketPrice, Toast.LENGTH_LONG).show();
         configure.dismiss();
+    }
+
+    public void TimerStart(){
+        timer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                noOfSeats = Integer.parseInt(stSeatAvailable);
+                System.out.println(tvSeatAvailable.getText().toString());
+                int seat = Integer.parseInt(tvSeatAvailable.getText().toString()) + arrayList.size();
+                String st = Integer.toString(seat);
+                Map<String, Object> upSeats = new HashMap<>();
+                upSeats.put("NumberOfSeat", st);
+                seatsNo.updateChildren(upSeats).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            tvSeatAvailable.setText(st);
+                            Toast.makeText(BookTicket.this, st, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                Intent intent = new Intent(BookTicket.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        };
+        timer.schedule(timerTask, 60000);
+    }
+
+    public static void TimerCancel(){
+        timerTask.cancel();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        noOfSeats = Integer.parseInt(stSeatAvailable);
+        int seat = Integer.parseInt(tvSeatAvailable.getText().toString()) + arrayList.size();
+        String st = Integer.toString(seat);
+        Map<String, Object> upSeats = new HashMap<>();
+        upSeats.put("NumberOfSeat", st);
+        seatsNo.updateChildren(upSeats);
+        Intent intent = new Intent(BookTicket.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void onButtonClickAdd() {
@@ -126,6 +177,7 @@ public class BookTicket extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 edtTraveller.setText("");
                 calculate_price();
+                GetNoOfPSeat();
             }
         });
     }
@@ -145,64 +197,18 @@ public class BookTicket extends AppCompatActivity {
         } else {
             int new_val = Integer.parseInt(stSeatAvailable) - arrayList.size();
             String st = Integer.toString(new_val);
-            Toast.makeText(BookTicket.this, st, Toast.LENGTH_LONG).show();
             Map<String, Object> upSeats = new HashMap<>();
             upSeats.put("NumberOfSeat", st);
             seatsNo.updateChildren(upSeats).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        Intent in = new Intent(BookTicket.this, Ticekets_booked.class);
-                        startActivity(in);
+                        tvSeatAvailable.setText(st);
+                        Toast.makeText(BookTicket.this, st, Toast.LENGTH_LONG).show();
                     }
                 }
             });
         }
     }
 
-    private void BookTickets() {
-        if (noOfSeats <= 0) {
-        } else {
-            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-            String User = firebaseUser.getUid();
-            confirmTicket = FirebaseDatabase.getInstance().getReference().
-                    child("Tickets").child(stDate).child(stBusNo).child(User);
-
-            DatabaseReference TicketID = FirebaseDatabase.getInstance().getReference().
-                    child("Tickets").child("TicketID").child(stDate);
-
-            DatabaseReference Ticket_Check_User_Admin = FirebaseDatabase.getInstance().
-                    getReference().child("Tickets").child("Ticket_Check_User_Admin")
-                    .child("On " + stDate + " by bus no " + stBusNo);
-
-            DatabaseReference Ticket_User_Search = FirebaseDatabase.getInstance().
-                    getReference().child("Tickets").child("Tickets_User_Search").child(User)
-                    .child("On " + stDate + " by bus no " + stBusNo);
-
-            DatabaseReference Ticket_HashCode = FirebaseDatabase.getInstance().getReference()
-                    .child("Tickets").child("Ticket_HashCode").child(User);
-
-            //Here is the code to store the ticket in TicketID node
-            HashMap<String, Object> H_TicketID = new HashMap<>();
-            H_TicketID.put(stDate + stBusNo, "On " + stDate + " by bus no " + stBusNo);
-            TicketID.updateChildren(H_TicketID);
-
-            //Here is the code to store Ticket_Check_User_Admin
-            int Length = arrayList.size();//Data stored in list
-            HashMap<String, Object> H_Ticket_Check_User_Admin = new HashMap<>();//Data stored in list are accessed one by one
-            for (int a = 0; a < Length; a++) {
-                H_Ticket_Check_User_Admin.put(User + "_Traveller_" + a, arrayList.get(a));
-            }
-            Ticket_Check_User_Admin.updateChildren(H_Ticket_Check_User_Admin);
-
-            //Here is the code to store Ticket_User_Search node it will have same hashmap as Ticket_Check_User_Admin
-            Ticket_User_Search.updateChildren(H_Ticket_Check_User_Admin);
-
-            //Ticket_HashCode is stored
-            HashMap<String, Object> H_Ticket_HashCode = new HashMap<>();
-            H_Ticket_HashCode.put(stDate + stBusNo, "On " + stDate + " by bus no " + stBusNo);
-            Ticket_HashCode.updateChildren(H_Ticket_HashCode);
-        }
-    }
 }

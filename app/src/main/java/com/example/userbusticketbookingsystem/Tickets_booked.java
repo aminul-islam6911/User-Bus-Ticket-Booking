@@ -20,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class Ticekets_booked extends AppCompatActivity {
+public class Tickets_booked extends AppCompatActivity {
     ArrayList<String> Tickets = new ArrayList<>();
     private ListView myListview;
 
@@ -71,8 +71,8 @@ public class Ticekets_booked extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 String database_ref = Tickets.get(i);
-                Toast.makeText(Ticekets_booked.this, database_ref, Toast.LENGTH_LONG).show();
-                Intent in = new Intent(Ticekets_booked.this, names_user.class);
+                Toast.makeText(Tickets_booked.this, database_ref, Toast.LENGTH_LONG).show();
+                Intent in = new Intent(Tickets_booked.this, names_user.class);
                 in.putExtra("database_ref", database_ref);
                 startActivity(in);
             }
@@ -82,7 +82,7 @@ public class Ticekets_booked extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(Ticekets_booked.this, MainActivity.class);
+        Intent intent = new Intent(Tickets_booked.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

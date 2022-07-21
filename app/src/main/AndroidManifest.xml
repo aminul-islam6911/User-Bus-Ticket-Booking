@@ -14,10 +14,13 @@
         android:theme="@style/Theme.UserBusTicketBookingSystem"
         tools:targetApi="31">
         <activity
+            android:name=".Payment"
+            android:exported="false" />
+        <activity
             android:name=".names_user"
             android:exported="false" />
         <activity
-            android:name=".Ticekets_booked"
+            android:name=".Tickets_booked"
             android:exported="false" />
         <activity
             android:name=".BookTicket"

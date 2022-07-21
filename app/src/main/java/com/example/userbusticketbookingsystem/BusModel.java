@@ -4,7 +4,6 @@ public class BusModel {
     public String arrivalLoc;
     public String arrivalTime;
     public String busNo;
-    public String date;
     public String departureLoc;
     public String departureTime;
     public String typeSit;
@@ -13,11 +12,10 @@ public class BusModel {
     public BusModel() {
     }
 
-    public BusModel(String arrivalLoc, String arrivalTime, String busNo, String date, String departureLoc, String departureTime, String typeSit, String ticketPrice) {
+    public BusModel(String arrivalLoc, String arrivalTime, String busNo, String departureLoc, String departureTime, String typeSit, String ticketPrice) {
         this.arrivalLoc = arrivalLoc;
         this.arrivalTime = arrivalTime;
         this.busNo = busNo;
-        this.date = date;
         this.departureLoc = departureLoc;
         this.departureTime = departureTime;
         this.typeSit = typeSit;
@@ -46,14 +44,6 @@ public class BusModel {
 
     public void setBusNo(String busNo) {
         this.busNo = busNo;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public String getDepartureLoc() {

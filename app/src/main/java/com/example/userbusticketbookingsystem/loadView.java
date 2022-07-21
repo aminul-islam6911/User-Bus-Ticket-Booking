@@ -16,7 +16,6 @@ public class loadView extends RecyclerView.ViewHolder {
     public loadView(@NonNull View itemView) {
         super(itemView);
         mView = itemView;
-        textDate = mView.findViewById(R.id.date);
         textTimeStart = mView.findViewById(R.id.startingTime);
         textTimeEnd = mView.findViewById(R.id.arrivalTime);
         textLocationPinStart = mView.findViewById(R.id.starting);
@@ -25,11 +24,6 @@ public class loadView extends RecyclerView.ViewHolder {
         textSeatType = mView.findViewById(R.id.busType);
         blCard = mView.findViewById(R.id.cardView);
         ticketPrice = mView.findViewById(R.id.ticketPrice);
-    }
-
-
-    public void settextDate(String Textdate) {
-        textDate.setText("Date: " + Textdate);
     }
 
     public void settextTimeStart(String TextTimeStart) {
@@ -57,7 +51,7 @@ public class loadView extends RecyclerView.ViewHolder {
     }
 
     public void settextPrice(String TextPrice) {
-        ticketPrice.setText(TextPrice + " Rs");
+        ticketPrice.setText(TextPrice + " Tk");
     }
 
 }
