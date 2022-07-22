@@ -7,10 +7,24 @@
     android:padding="10dp"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/MN_Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edit_box"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:textStyle="italic" />
+
     <ImageView
         android:id="@+id/img"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_below="@id/MN_Name"
+        android:layout_marginTop="10dp"
         android:src="@drawable/lgbus" />
 
     <Button
@@ -19,7 +33,7 @@
         android:layout_height="60dp"
         android:layout_below="@id/img"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/button"
         android:fontFamily="@font/aclonica"
         android:gravity="center"

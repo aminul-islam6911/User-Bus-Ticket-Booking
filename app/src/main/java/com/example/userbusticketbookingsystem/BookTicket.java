@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -70,6 +69,8 @@ public class BookTicket extends AppCompatActivity {
                     GetNoOfPSeat();
                     TimerStart();
                     Intent in = new Intent(BookTicket.this, Payment.class);
+                    in.putExtra("Date",stDate);
+                    in.putExtra("BusNo",stBusNo);
                     startActivity(in);
                 } else {
                     Toast.makeText(BookTicket.this, "Please select some places", Toast.LENGTH_LONG).show();
@@ -122,7 +123,7 @@ public class BookTicket extends AppCompatActivity {
         configure.dismiss();
     }
 
-    public void TimerStart(){
+    public void TimerStart() {
         timer = new Timer();
         timerTask = new TimerTask() {
             @Override
@@ -150,7 +151,7 @@ public class BookTicket extends AppCompatActivity {
         timer.schedule(timerTask, 60000);
     }
 
-    public static void TimerCancel(){
+    public static void TimerCancel() {
         timerTask.cancel();
     }
 

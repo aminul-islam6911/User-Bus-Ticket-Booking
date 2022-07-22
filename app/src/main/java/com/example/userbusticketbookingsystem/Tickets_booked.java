@@ -71,7 +71,6 @@ public class Tickets_booked extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 String database_ref = Tickets.get(i);
-                Toast.makeText(Tickets_booked.this, database_ref, Toast.LENGTH_LONG).show();
                 Intent in = new Intent(Tickets_booked.this, names_user.class);
                 in.putExtra("database_ref", database_ref);
                 startActivity(in);

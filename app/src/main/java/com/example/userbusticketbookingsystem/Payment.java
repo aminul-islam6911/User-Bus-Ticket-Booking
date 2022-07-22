@@ -1,5 +1,6 @@
 package com.example.userbusticketbookingsystem;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +35,8 @@ public class Payment extends AppCompatActivity {
             public void onClick(View v) {
                 BookTickets();
                 BookTicket.TimerCancel();
+                Intent intent = new Intent(Payment.this, Tickets_booked.class);
+                startActivity(intent);
             }
         });
     }

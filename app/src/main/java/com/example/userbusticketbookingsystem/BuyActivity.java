@@ -76,8 +76,14 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
     @Override
     protected void onStart() {
         super.onStart();
-        Calendar calendar = Calendar.getInstance();
-        currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+//        Calendar calendar = Calendar.getInstance();
+//        currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+//        MN_Select_date.setText(currentDate);
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+        currentDate = day + "-" + (month+1) + "-" + year;
         MN_Select_date.setText(currentDate);
     }
 

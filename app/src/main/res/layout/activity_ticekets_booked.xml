@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="15dp"
+    android:background="#FFC107"
     tools:context=".Tickets_booked">
 
     <TextView
@@ -15,6 +17,8 @@
         android:textSize="40sp" />
 
     <ListView
+        android:divider="@color/purple_500"
+        android:dividerHeight="2dp"
         android:id="@+id/TC_listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
