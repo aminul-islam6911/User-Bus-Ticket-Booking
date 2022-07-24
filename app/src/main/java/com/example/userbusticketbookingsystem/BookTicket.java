@@ -69,8 +69,14 @@ public class BookTicket extends AppCompatActivity {
                     GetNoOfPSeat();
                     TimerStart();
                     Intent in = new Intent(BookTicket.this, Payment.class);
-                    in.putExtra("Date",stDate);
-                    in.putExtra("BusNo",stBusNo);
+                    in.putExtra("Date", stDate);
+                    in.putExtra("BusNo", stBusNo);
+                    in.putExtra("Starting", stStarting);
+                    in.putExtra("Destination", stDestination);
+                    in.putExtra("StartingTime", stStartingTime);
+                    in.putExtra("ArrivalTime", stArrivalTime);
+                    in.putExtra("BusType", stBusType);
+                    in.putExtra("Price", stTicketPrice);
                     startActivity(in);
                 } else {
                     Toast.makeText(BookTicket.this, "Please select some places", Toast.LENGTH_LONG).show();

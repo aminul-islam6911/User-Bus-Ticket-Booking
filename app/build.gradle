@@ -43,4 +43,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.firebaseui:firebase-ui-database:2.3.0'
+    implementation 'com.itextpdf:itext7-core:7.1.8'
+    implementation 'com.itextpdf:io:7.1.8'
+    implementation 'com.itextpdf:kernel:7.1.8'
+    implementation 'com.itextpdf:layout:7.1.8'
 }
