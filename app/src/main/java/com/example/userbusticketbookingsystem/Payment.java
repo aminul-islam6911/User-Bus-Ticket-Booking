@@ -136,7 +136,20 @@ public class Payment extends AppCompatActivity {
         paint.setTextSize(15f);
         paint.setColor(Color.rgb(255, 0, 0));
         canvas.drawText("Bus Ticket Booking System", pageInfo.getPageWidth() / 2, 30, paint);
-        canvas.drawText(name, 80, 50, paint);
+
+        paint.setTextAlign(Paint.Align.LEFT);
+        paint.setTextSize(10f);
+        paint.setColor(Color.rgb(51, 0, 0));
+        canvas.drawText("Bus No : " + stBusNo, 40, 50, paint);
+        canvas.drawText("Date : " + stDate, 40, 60, paint);
+        canvas.drawText("Starting Place : " + stStarting, 40, 70, paint);
+        canvas.drawText("Destination : " + stDestination, 40, 80, paint);
+        canvas.drawText("Starting Time : " + stStartingTime, 40, 90, paint);
+        canvas.drawText("Arrival Time : " + stArrivalTime, 40, 100, paint);
+        canvas.drawText("Bus Type : " + stBusType, 40, 110, paint);
+        canvas.drawText("Price : " + stTicketPrice, 40, 120, paint);
+        canvas.drawText("Passengers Name -", 40, 150, paint);
+        canvas.drawText(name, 40, 160, paint);
 
         pdfDocument.finishPage(page);
         try {
