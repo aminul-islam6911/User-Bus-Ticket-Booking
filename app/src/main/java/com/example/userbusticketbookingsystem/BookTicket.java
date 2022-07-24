@@ -125,7 +125,6 @@ public class BookTicket extends AppCompatActivity {
         tvSeatAvailable.setText(stSeatAvailable);
         tvBusType.setText("Bus Type :" + stBusType);
         btnConfirmBooking.setText("Confirm(" + stTicketPrice + " Tk)");
-        Toast.makeText(BookTicket.this, stTicketPrice, Toast.LENGTH_LONG).show();
         configure.dismiss();
     }
 
@@ -145,7 +144,6 @@ public class BookTicket extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             tvSeatAvailable.setText(st);
-                            Toast.makeText(BookTicket.this, st, Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -211,11 +209,9 @@ public class BookTicket extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         tvSeatAvailable.setText(st);
-                        Toast.makeText(BookTicket.this, st, Toast.LENGTH_LONG).show();
                     }
                 }
             });
         }
     }
-
 }
