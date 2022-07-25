@@ -29,7 +29,7 @@ import java.util.TimerTask;
 public class BookTicket extends AppCompatActivity {
     private TextView tvBusNo, tvDate, tvStarting, tvDestination, tvStartingTime, tvArrivalTime,
             tvSeatAvailable, tvBusType;
-    private Button btnConfirmBooking, btnAddTraveller;
+    private Button btnConfirmBooking, btnAddTraveller, btnSeatReload;
     private String stBusNo, stDate, stStarting, stDestination, stStartingTime, stArrivalTime,
             stSeatAvailable, stBusType, stTicketPrice;
     private FirebaseUser firebaseUser;
@@ -133,8 +133,6 @@ public class BookTicket extends AppCompatActivity {
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                noOfSeats = Integer.parseInt(stSeatAvailable);
-                System.out.println(tvSeatAvailable.getText().toString());
                 int seat = Integer.parseInt(tvSeatAvailable.getText().toString()) + arrayList.size();
                 String st = Integer.toString(seat);
                 Map<String, Object> upSeats = new HashMap<>();
@@ -162,7 +160,6 @@ public class BookTicket extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        noOfSeats = Integer.parseInt(stSeatAvailable);
         int seat = Integer.parseInt(tvSeatAvailable.getText().toString()) + arrayList.size();
         String st = Integer.toString(seat);
         Map<String, Object> upSeats = new HashMap<>();
@@ -178,11 +175,19 @@ public class BookTicket extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String result = edtTraveller.getText().toString();
-                arrayList.add(result);
-                adapter.notifyDataSetChanged();
-                edtTraveller.setText("");
-                calculate_price();
-                GetNoOfPSeat();
+                noOfSeats = Integer.parseInt(tvSeatAvailable.getText().toString());
+                if (result.isEmpty()) {
+                    Toast.makeText(BookTicket.this, "Add Passenger name", Toast.LENGTH_SHORT).show();
+                } else if (noOfSeats <= 0) {
+                    edtTraveller.setText("");
+                    Toast.makeText(BookTicket.this, "Seats Are full", Toast.LENGTH_SHORT).show();
+                } else {
+                    arrayList.add(result);
+                    adapter.notifyDataSetChanged();
+                    edtTraveller.setText("");
+                    calculate_price();
+                    GetNoOfPSeat();
+                }
             }
         });
     }
@@ -196,22 +201,17 @@ public class BookTicket extends AppCompatActivity {
     }
 
     private void GetNoOfPSeat() {
-        noOfSeats = Integer.parseInt(stSeatAvailable);
-        if (noOfSeats <= 0) {
-            Toast.makeText(BookTicket.this, "Sorry seats are full", Toast.LENGTH_LONG).show();
-        } else {
-            int new_val = Integer.parseInt(stSeatAvailable) - arrayList.size();
-            String st = Integer.toString(new_val);
-            Map<String, Object> upSeats = new HashMap<>();
-            upSeats.put("NumberOfSeat", st);
-            seatsNo.updateChildren(upSeats).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        tvSeatAvailable.setText(st);
-                    }
+        int new_val = Integer.parseInt(stSeatAvailable) - arrayList.size();
+        String st = Integer.toString(new_val);
+        Map<String, Object> upSeats = new HashMap<>();
+        upSeats.put("NumberOfSeat", st);
+        seatsNo.updateChildren(upSeats).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    tvSeatAvailable.setText(st);
                 }
-            });
-        }
+            }
+        });
     }
 }
