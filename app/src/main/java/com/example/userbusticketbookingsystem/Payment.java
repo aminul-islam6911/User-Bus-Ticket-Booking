@@ -93,7 +93,7 @@ public class Payment extends AppCompatActivity {
 
         DatabaseReference Ticket_Check_User_Admin = FirebaseDatabase.getInstance().
                 getReference().child("Tickets").child("Ticket_Check_User_Admin")
-                .child("On " + stDate + " by bus no " + stBusNo);
+                .child("On " + stDate + " by bus no " + stBusNo).child(User);
         //Here is the code to store Ticket_Check_User_Admin
         int Length = BookTicket.arrayList.size();//Data stored in list
         HashMap<String, Object> H_Ticket_Check_User_Admin = new HashMap<>();//Data stored in list are accessed one by one

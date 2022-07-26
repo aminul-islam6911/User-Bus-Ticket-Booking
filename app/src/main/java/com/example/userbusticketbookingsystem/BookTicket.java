@@ -17,8 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,11 +65,23 @@ public class BookTicket extends AppCompatActivity {
         listView.setAdapter(adapter);
         onButtonClickAdd();
 
+        seatsNo.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String v = snapshot.child("NumberOfSeat").getValue(String.class);
+                tvSeatAvailable.setText(v);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(BookTicket.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         btnConfirmBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!arrayList.isEmpty()) {
-                    GetNoOfPSeat();
                     TimerStart();
                     Intent in = new Intent(BookTicket.this, Payment.class);
                     in.putExtra("Date", stDate);
@@ -79,7 +94,7 @@ public class BookTicket extends AppCompatActivity {
                     in.putExtra("Price", stTicketPrice);
                     startActivity(in);
                 } else {
-                    Toast.makeText(BookTicket.this, "Please select some places", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BookTicket.this, "Please add passenger name", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -122,7 +137,7 @@ public class BookTicket extends AppCompatActivity {
         tvDestination.setText("To :" + stDestination);
         tvStartingTime.setText("Starting Time :" + stStartingTime);
         tvArrivalTime.setText("Arrival Time :" + stArrivalTime);
-        tvSeatAvailable.setText(stSeatAvailable);
+        //tvSeatAvailable.setText(stSeatAvailable);
         tvBusType.setText("Bus Type :" + stBusType);
         btnConfirmBooking.setText("Confirm(" + stTicketPrice + " Tk)");
         configure.dismiss();
@@ -176,11 +191,12 @@ public class BookTicket extends AppCompatActivity {
             public void onClick(View view) {
                 String result = edtTraveller.getText().toString();
                 noOfSeats = Integer.parseInt(tvSeatAvailable.getText().toString());
-                if (result.isEmpty()) {
-                    Toast.makeText(BookTicket.this, "Add Passenger name", Toast.LENGTH_SHORT).show();
-                } else if (noOfSeats <= 0) {
+                if (noOfSeats <= 0) {
                     edtTraveller.setText("");
-                    Toast.makeText(BookTicket.this, "Seats Are full", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BookTicket.this, "No seats availble", Toast.LENGTH_SHORT).show();
+//                    btnAddTraveller.setClickable(false);
+                } else if (result.isEmpty()) {
+                    Toast.makeText(BookTicket.this, "Add Passenger name", Toast.LENGTH_SHORT).show();
                 } else {
                     arrayList.add(result);
                     adapter.notifyDataSetChanged();
@@ -201,7 +217,7 @@ public class BookTicket extends AppCompatActivity {
     }
 
     private void GetNoOfPSeat() {
-        int new_val = Integer.parseInt(stSeatAvailable) - arrayList.size();
+        int new_val = Integer.parseInt(tvSeatAvailable.getText().toString()) - 1;
         String st = Integer.toString(new_val);
         Map<String, Object> upSeats = new HashMap<>();
         upSeats.put("NumberOfSeat", st);
