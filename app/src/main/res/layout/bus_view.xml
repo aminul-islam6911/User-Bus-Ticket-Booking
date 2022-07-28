@@ -12,6 +12,7 @@
         android:layout_margin="5dp"
         android:backgroundTint="#FF9800"
         android:clickable="true"
+        android:focusable="true"
         app:cardCornerRadius="8dp">
 
         <RelativeLayout

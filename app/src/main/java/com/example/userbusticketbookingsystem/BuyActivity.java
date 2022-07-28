@@ -193,7 +193,7 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
 
     public void Searching() {
             dbEveryday = DepartureAd + " " + ArrivalAd;
-            loadbus = FirebaseDatabase.getInstance().getReference().child("Buses").child(dbEveryday);
+            loadbus = FirebaseDatabase.getInstance().getReference().child("Schedule").child(dbEveryday);
             FirebaseRecyclerAdapter<BusModel, loadView> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BusModel, loadView>(
                     BusModel.class,
                     R.layout.bus_view,

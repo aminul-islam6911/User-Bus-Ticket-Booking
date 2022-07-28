@@ -126,7 +126,7 @@ public class BookTicket extends AppCompatActivity {
         stBusType = getIntent().getStringExtra("BusType");
         stTicketPrice = getIntent().getStringExtra("Price");
         seatNoRef = stStarting + " " + stDestination;
-        seatsNo = FirebaseDatabase.getInstance().getReference().child("Buses")
+        seatsNo = FirebaseDatabase.getInstance().getReference().child("Schedule")
                 .child(seatNoRef).child(stBusNo);
     }
 

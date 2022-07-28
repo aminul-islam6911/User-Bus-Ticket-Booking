@@ -209,7 +209,7 @@ public class BookActivity extends AppCompatActivity implements IFirebaseLoadDone
             Toast.makeText(this, "Please Select Date", Toast.LENGTH_SHORT).show();
         } else {
             dbDate = DepartureAd + " " + ArrivalAd;
-            loadbusSp = FirebaseDatabase.getInstance().getReference().child("Buses").child(dbDate);
+            loadbusSp = FirebaseDatabase.getInstance().getReference().child("Schedule").child(dbDate);
             FirebaseRecyclerAdapter<BusModel, loadView> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BusModel, loadView>(
                     BusModel.class,
                     R.layout.bus_view,
