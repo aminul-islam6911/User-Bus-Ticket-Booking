@@ -137,7 +137,6 @@ public class BookTicket extends AppCompatActivity {
         tvDestination.setText("To :" + stDestination);
         tvStartingTime.setText("Starting Time :" + stStartingTime);
         tvArrivalTime.setText("Arrival Time :" + stArrivalTime);
-        //tvSeatAvailable.setText(stSeatAvailable);
         tvBusType.setText("Bus Type :" + stBusType);
         btnConfirmBooking.setText("Confirm(" + stTicketPrice + " Tk)");
         configure.dismiss();

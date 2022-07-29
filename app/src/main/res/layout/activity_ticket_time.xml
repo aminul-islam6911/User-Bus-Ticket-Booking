@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFC107"
+    android:padding="15dp"
+    tools:context=".Tickets_booked">
+
+    <TextView
+        android:id="@+id/Heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ticket Time"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="40sp" />
+
+    <ListView
+        android:id="@+id/TCT_listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Heading"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:divider="@color/purple_500"
+        android:dividerHeight="2dp" />
+
+</RelativeLayout>

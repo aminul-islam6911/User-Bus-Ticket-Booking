@@ -70,9 +70,9 @@ public class Tickets_booked extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                String database_ref = Tickets.get(i);
-                Intent in = new Intent(Tickets_booked.this, names_user.class);
-                in.putExtra("database_ref", database_ref);
+                String date_ref = Tickets.get(i);
+                Intent in = new Intent(Tickets_booked.this, Ticket_time.class);
+                in.putExtra("date_ref", date_ref);
                 startActivity(in);
             }
         });

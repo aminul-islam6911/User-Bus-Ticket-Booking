@@ -7,11 +7,11 @@
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\aikay\.android\avd\Copy_of_Samsung_J5_Prime_API_26.avd" />
+            <value value="C:\Users\aikay\.android\avd\Samsung_J5_Prime_API_26.avd" />
           </Key>
         </deviceKey>
       </Target>
     </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2022-07-28T06:43:00.769034300Z" />
+    <timeTargetWasSelectedWithDropDown value="2022-07-29T08:47:35.142472500Z" />
   </component>
 </project>

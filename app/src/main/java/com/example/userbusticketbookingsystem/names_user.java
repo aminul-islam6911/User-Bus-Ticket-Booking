@@ -35,10 +35,11 @@ public class names_user extends AppCompatActivity {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         String User = firebaseUser.getUid();
 
-        String intent_ref = getIntent().getStringExtra("database_ref");
+        String date_ref = getIntent().getStringExtra("date_ref");
+        String time_ref = getIntent().getStringExtra("time_ref");
 
         DatabaseReference Ticket_User_Search = FirebaseDatabase.getInstance().
-                getReference().child("Tickets").child("Tickets_User_Search").child(User).child(intent_ref);
+                getReference().child("Tickets").child("Tickets_User_Search").child(User).child(date_ref).child(time_ref);
 
         Ticket_User_Search.addChildEventListener(new ChildEventListener() {
             @Override

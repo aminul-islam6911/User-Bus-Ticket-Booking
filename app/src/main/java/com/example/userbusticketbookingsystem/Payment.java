@@ -31,7 +31,8 @@ import java.util.HashMap;
 public class Payment extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private Button button;
-    private String User;
+    private String User, timeStamp;
+    private Date date;
     private String stBusNo, stDate, stStarting, stDestination, stStartingTime, stArrivalTime,
             stSeatAvailable, stBusType, stTicketPrice;
 
@@ -44,6 +45,10 @@ public class Payment extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
 
         GetStringFromIntent();
+
+        //Create time stamp
+        date = new Date();
+        timeStamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(date);
 
         button = findViewById(R.id.button);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -74,44 +79,66 @@ public class Payment extends AppCompatActivity {
     }
 
     private void BookTickets() {
-        DatabaseReference confirmTicket = FirebaseDatabase.getInstance().getReference().
-                child("Tickets").child(stDate).child(stBusNo).child(User);
-
+//Here is the code to store the Tickets in TicketID node
         DatabaseReference TicketID = FirebaseDatabase.getInstance().getReference().
                 child("Tickets").child("TicketID").child(stDate);
-        //Here is the code to store the ticket in TicketID node
+
         HashMap<String, Object> H_TicketID = new HashMap<>();
         H_TicketID.put(stDate + " " + stBusNo, "On " + stDate + " by bus no " + stBusNo);
         TicketID.updateChildren(H_TicketID);
 
+
+//Ticket HashCode is stored
         DatabaseReference Ticket_HashCode = FirebaseDatabase.getInstance().getReference()
                 .child("Tickets").child("Ticket_HashCode").child(User);
-        //Ticket_HashCode is stored
+
         HashMap<String, Object> H_Ticket_HashCode = new HashMap<>();
         H_Ticket_HashCode.put(stDate + " " + stBusNo, "On " + stDate + " by bus no " + stBusNo);
         Ticket_HashCode.updateChildren(H_Ticket_HashCode);
 
+
+//Ticket Time is stored
+        DatabaseReference Ticket_Time = FirebaseDatabase.getInstance().getReference()
+                .child("Tickets").child("Ticket_Time").child(User).child("On " + stDate + " by bus no " + stBusNo);
+
+        HashMap<String, Object> H_Ticket_Time = new HashMap<>();
+        H_Ticket_Time.put(timeStamp, timeStamp);
+        Ticket_Time.updateChildren(H_Ticket_Time);
+
+
+//Admin Time is stored
+        DatabaseReference Admin_Time = FirebaseDatabase.getInstance().getReference()
+                .child("Tickets").child("Admin_Time").child("On " + stDate + " by bus no " + stBusNo);
+
+        HashMap<String, Object> H_Admin_Time = new HashMap<>();
+        H_Admin_Time.put(timeStamp, timeStamp);
+        Admin_Time.updateChildren(H_Admin_Time);
+
+
+//Here is the code to store Ticket_Check_User_Admin
         DatabaseReference Ticket_Check_User_Admin = FirebaseDatabase.getInstance().
                 getReference().child("Tickets").child("Ticket_Check_User_Admin")
-                .child("On " + stDate + " by bus no " + stBusNo).child(User);
-        //Here is the code to store Ticket_Check_User_Admin
-        int Length = BookTicket.arrayList.size();//Data stored in list
-        HashMap<String, Object> H_Ticket_Check_User_Admin = new HashMap<>();//Data stored in list are accessed one by one
-        for (int a = 0; a < Length; a++) {
-            H_Ticket_Check_User_Admin.put(User + "_Traveller_" + a, BookTicket.arrayList.get(a));
-        }
-        Ticket_Check_User_Admin.updateChildren(H_Ticket_Check_User_Admin);
+                .child("On " + stDate + " by bus no " + stBusNo);
 
+        int Length = BookTicket.arrayList.size();
+        HashMap<String, Object> H_Ticket_Check_User_Admin = new HashMap<>();//Data stored in list
+        for (int a = 0; a < Length; a++) {
+            H_Ticket_Check_User_Admin.put(User + "_Traveller_" + a, BookTicket.arrayList.get(a));//Data stored in list are accessed one by one
+        }
+        Ticket_Check_User_Admin.child(timeStamp).updateChildren(H_Ticket_Check_User_Admin);
+
+
+//Here is the code to store Ticket_User_Search
         DatabaseReference Ticket_User_Search = FirebaseDatabase.getInstance().
                 getReference().child("Tickets").child("Tickets_User_Search").child(User)
                 .child("On " + stDate + " by bus no " + stBusNo);
-        //Here is the code to store Ticket_User_Search node it will have same hashmap as Ticket_Check_User_Admin
+
         int l = BookTicket.arrayList.size();//Data stored in list
         HashMap<String, Object> H_Ticket_User_Search = new HashMap<>();//Data stored in list are accessed one by one
         for (int a = 0; a < l; a++) {
             H_Ticket_User_Search.put(User + "_Traveller_" + a, BookTicket.arrayList.get(a));
         }
-        Ticket_User_Search.updateChildren(H_Ticket_User_Search);
+        Ticket_User_Search.child(timeStamp).updateChildren(H_Ticket_User_Search);
     }
 
     private void CreatePDF() {
@@ -121,9 +148,6 @@ public class Payment extends AppCompatActivity {
         if (!pdfFolder.exists()) {
             pdfFolder.mkdir();
         }
-        //Create time stamp
-        Date date = new Date();
-        String timeStamp = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(date);
         File file = new File(pdfFolder + " " + timeStamp + ".pdf");
 
         PdfDocument pdfDocument = new PdfDocument();

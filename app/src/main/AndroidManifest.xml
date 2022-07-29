@@ -16,6 +16,9 @@
         android:theme="@style/Theme.UserBusTicketBookingSystem"
         tools:targetApi="31">
         <activity
+            android:name=".Ticket_time"
+            android:exported="false" />
+        <activity
             android:name=".Payment"
             android:exported="false" />
         <activity
