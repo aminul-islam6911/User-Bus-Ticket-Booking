@@ -23,6 +23,8 @@ import java.util.ArrayList;
 
 public class Ticket_time extends AppCompatActivity {
     ArrayList<String> Tickets_time = new ArrayList<>();
+    private String date_ref,seatNoRef,stBusNo,stSeatAvailable;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +32,19 @@ public class Ticket_time extends AppCompatActivity {
         setContentView(R.layout.activity_ticket_time);
         ListView listView = findViewById(R.id.TCT_listView);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Tickets_time);
-        listView.setAdapter(adapter);
+        date_ref = getIntent().getStringExtra("date_ref");
+        seatNoRef = getIntent().getStringExtra("seatNoRef");
+        stBusNo = getIntent().getStringExtra("stBusNo");
+        stSeatAvailable = getIntent().getStringExtra("stSeatAvailable");
 
         FirebaseUser mauth = FirebaseAuth.getInstance().getCurrentUser();
         String User = mauth.getUid();
 
-        String date_ref = getIntent().getStringExtra("date_ref");
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Tickets_time);
+        listView.setAdapter(adapter);
 
-        DatabaseReference Ticket_time = FirebaseDatabase.getInstance().getReference().child("Tickets").child("Ticket_Time").child(User).child(date_ref);
-        Ticket_time.addChildEventListener(new ChildEventListener() {
+        DatabaseReference User_Time = FirebaseDatabase.getInstance().getReference().child("Tickets").child("User_Time").child(User).child(date_ref);
+        User_Time.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String myChildViews = snapshot.getValue(String.class);
@@ -74,7 +79,10 @@ public class Ticket_time extends AppCompatActivity {
                 String time_ref = Tickets_time.get(position);
                 Intent in = new Intent(Ticket_time.this, names_user.class);
                 in.putExtra("time_ref", time_ref);
-                in.putExtra("date_ref",date_ref);
+                in.putExtra("date_ref", date_ref);
+                in.putExtra("seatNoRef", seatNoRef);
+                in.putExtra("stBusNo", stBusNo);
+                in.putExtra("stSeatAvailable", stSeatAvailable);
                 startActivity(in);
             }
         });
