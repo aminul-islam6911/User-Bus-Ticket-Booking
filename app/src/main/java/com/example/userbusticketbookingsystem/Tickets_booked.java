@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 public class Tickets_booked extends AppCompatActivity {
     ArrayList<String> Tickets = new ArrayList<>();
     private ListView myListview;
+    private String seatNoRef,stBusNo,stSeatAvailable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +30,18 @@ public class Tickets_booked extends AppCompatActivity {
         setContentView(R.layout.activity_ticekets_booked);
         myListview = findViewById(R.id.TC_listView);
 
-        final ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Tickets);
-        myListview.setAdapter(myArrayAdapter);
+        seatNoRef = getIntent().getStringExtra("seatNoRef");
+        stBusNo = getIntent().getStringExtra("stBusNo");
+        stSeatAvailable = getIntent().getStringExtra("stSeatAvailable");
 
         FirebaseUser mauth = FirebaseAuth.getInstance().getCurrentUser();
         String User = mauth.getUid();
 
-        DatabaseReference Ticket_HashCode = FirebaseDatabase.getInstance().getReference().child("Tickets").child("Ticket_HashCode").child(User);
-        Ticket_HashCode.addChildEventListener(new ChildEventListener() {
+        final ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Tickets);
+        myListview.setAdapter(myArrayAdapter);
+
+        DatabaseReference User_HashCode = FirebaseDatabase.getInstance().getReference().child("Tickets").child("User_HashCode").child(User);
+        User_HashCode.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String myChildViews = dataSnapshot.getValue(String.class);
@@ -69,10 +73,12 @@ public class Tickets_booked extends AppCompatActivity {
         myListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                 String date_ref = Tickets.get(i);
                 Intent in = new Intent(Tickets_booked.this, Ticket_time.class);
                 in.putExtra("date_ref", date_ref);
+                in.putExtra("seatNoRef", seatNoRef);
+                in.putExtra("stBusNo", stBusNo);
+                in.putExtra("stSeatAvailable", stSeatAvailable);
                 startActivity(in);
             }
         });

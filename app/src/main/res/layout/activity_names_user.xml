@@ -20,10 +20,23 @@
     <ListView
         android:id="@+id/NM_listView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="450dp"
         android:layout_below="@id/Heading"
         android:layout_marginTop="10dp"
         android:divider="@color/purple_500"
         android:dividerHeight="2dp" />
+
+    <Button
+        android:id="@+id/btnTicDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/NM_listView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/button"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/But_bg"
+        android:textSize="20sp" />
 
 </RelativeLayout>

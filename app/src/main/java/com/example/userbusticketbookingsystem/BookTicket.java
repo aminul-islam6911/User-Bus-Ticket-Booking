@@ -92,6 +92,8 @@ public class BookTicket extends AppCompatActivity {
                     in.putExtra("ArrivalTime", stArrivalTime);
                     in.putExtra("BusType", stBusType);
                     in.putExtra("Price", stTicketPrice);
+                    in.putExtra("seatNoRef", seatNoRef);
+                    in.putExtra("stSeatAvailable", stSeatAvailable);
                     startActivity(in);
                 } else {
                     Toast.makeText(BookTicket.this, "Please add passenger name", Toast.LENGTH_LONG).show();
@@ -122,7 +124,7 @@ public class BookTicket extends AppCompatActivity {
         stDestination = getIntent().getStringExtra("Destination");
         stStartingTime = getIntent().getStringExtra("StartingTime");
         stArrivalTime = getIntent().getStringExtra("ArrivalTime");
-        stSeatAvailable = getIntent().getStringExtra("NumberOfSeat");
+        stSeatAvailable = tvSeatAvailable.getText().toString();
         stBusType = getIntent().getStringExtra("BusType");
         stTicketPrice = getIntent().getStringExtra("Price");
         seatNoRef = stStarting + " " + stDestination;
