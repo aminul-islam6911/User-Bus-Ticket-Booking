@@ -22,17 +22,12 @@ import java.util.ArrayList;
 public class Tickets_booked extends AppCompatActivity {
     ArrayList<String> Tickets = new ArrayList<>();
     private ListView myListview;
-    private String seatNoRef,stBusNo,stSeatAvailable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticekets_booked);
         myListview = findViewById(R.id.TC_listView);
-
-        seatNoRef = getIntent().getStringExtra("seatNoRef");
-        stBusNo = getIntent().getStringExtra("stBusNo");
-        stSeatAvailable = getIntent().getStringExtra("stSeatAvailable");
 
         FirebaseUser mauth = FirebaseAuth.getInstance().getCurrentUser();
         String User = mauth.getUid();
@@ -76,9 +71,6 @@ public class Tickets_booked extends AppCompatActivity {
                 String date_ref = Tickets.get(i);
                 Intent in = new Intent(Tickets_booked.this, Ticket_time.class);
                 in.putExtra("date_ref", date_ref);
-                in.putExtra("seatNoRef", seatNoRef);
-                in.putExtra("stBusNo", stBusNo);
-                in.putExtra("stSeatAvailable", stSeatAvailable);
                 startActivity(in);
             }
         });

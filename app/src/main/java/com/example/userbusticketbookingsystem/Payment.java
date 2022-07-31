@@ -60,10 +60,7 @@ public class Payment extends AppCompatActivity {
                 BookTickets();
                 CreatePDF();
                 BookTicket.TimerCancel();
-                Intent intent = new Intent(Payment.this, Tickets_booked.class);
-                intent.putExtra("seatNoRef", seatNoRef);
-                intent.putExtra("stBusNo", stBusNo);
-                intent.putExtra("stSeatAvailable", stSeatAvailable);
+                Intent intent = new Intent(Payment.this, MainActivity.class);
                 startActivity(intent);
             }
         });

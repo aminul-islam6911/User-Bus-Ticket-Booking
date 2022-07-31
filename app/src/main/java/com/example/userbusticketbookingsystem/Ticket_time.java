@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class Ticket_time extends AppCompatActivity {
     ArrayList<String> Tickets_time = new ArrayList<>();
-    private String date_ref,seatNoRef,stBusNo,stSeatAvailable;
+    private String date_ref;
 
 
     @Override
@@ -33,9 +33,6 @@ public class Ticket_time extends AppCompatActivity {
         ListView listView = findViewById(R.id.TCT_listView);
 
         date_ref = getIntent().getStringExtra("date_ref");
-        seatNoRef = getIntent().getStringExtra("seatNoRef");
-        stBusNo = getIntent().getStringExtra("stBusNo");
-        stSeatAvailable = getIntent().getStringExtra("stSeatAvailable");
 
         FirebaseUser mauth = FirebaseAuth.getInstance().getCurrentUser();
         String User = mauth.getUid();
@@ -80,9 +77,6 @@ public class Ticket_time extends AppCompatActivity {
                 Intent in = new Intent(Ticket_time.this, names_user.class);
                 in.putExtra("time_ref", time_ref);
                 in.putExtra("date_ref", date_ref);
-                in.putExtra("seatNoRef", seatNoRef);
-                in.putExtra("stBusNo", stBusNo);
-                in.putExtra("stSeatAvailable", stSeatAvailable);
                 startActivity(in);
             }
         });
