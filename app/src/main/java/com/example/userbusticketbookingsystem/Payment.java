@@ -109,6 +109,7 @@ public class Payment extends AppCompatActivity {
         a_map.put("BusNo", stBusNo);
         a_map.put("TicketPrice", stTicketPrice);
         a_map.put("Name", arrTostr);
+        a_map.put("User", User);
         a_map.put("NoOfTraveller", noOfbookedSeats);
         Admin_Ticket.child(a_key).setValue(a_map);
 
