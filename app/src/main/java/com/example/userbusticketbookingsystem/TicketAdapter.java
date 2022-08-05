@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class TicketAdapter extends RecyclerView.ViewHolder {
     TextView txtArrivalTime, txtBusNo, txtBusType, txtDestination,
             txtStart, txtStartingTime, txtTicketPrice, txtTravellerNo, txtDate;
-    Button tView,tPrint,tCancel;
+    Button tCancel;
 
     public TicketAdapter(@NonNull View itemView) {
         super(itemView);
@@ -24,8 +24,6 @@ public class TicketAdapter extends RecyclerView.ViewHolder {
         txtStartingTime = itemView.findViewById(R.id.tStartingTime);
         txtTicketPrice = itemView.findViewById(R.id.tTicketPrice);
         txtTravellerNo = itemView.findViewById(R.id.tTraveller);
-        tView = itemView.findViewById(R.id.tView);
-        tPrint = itemView.findViewById(R.id.tPrint);
         tCancel = itemView.findViewById(R.id.tCancel);
 
     }

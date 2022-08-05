@@ -34,7 +34,7 @@ import java.util.Objects;
 
 public class TicketActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    private String User, stGetSeats, stDateId, stBusNo, stTravellerNo, stStart, stDestination, stDate, stTime;
+    private String User, stGetSeats, stDateId, stBusNo, stTravellerNo, stStart, stDestination, stDate;
     private TextView start, des, busNo, traveller, date;
     private FirebaseRecyclerAdapter<TicketModel, TicketAdapter> firebaseRecyclerAdapter;
     private DatabaseReference seatUp;
