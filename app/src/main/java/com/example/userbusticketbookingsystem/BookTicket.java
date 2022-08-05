@@ -34,7 +34,7 @@ public class BookTicket extends AppCompatActivity {
             tvSeatAvailable, tvBusType;
     private Button btnConfirmBooking, btnAddTraveller, btnSeatReload;
     private String stBusNo, stDate, stStarting, stDestination, stStartingTime, stArrivalTime,
-            stSeatAvailable, stBusType, stTicketPrice;
+            stSeatAvailable, stBusType, stTicketPrice, str_total_price;
     private FirebaseUser firebaseUser;
     private DatabaseReference seatsNo, confirmTicket;
     private String road_ref;
@@ -91,7 +91,7 @@ public class BookTicket extends AppCompatActivity {
                     in.putExtra("StartingTime", stStartingTime);
                     in.putExtra("ArrivalTime", stArrivalTime);
                     in.putExtra("BusType", stBusType);
-                    in.putExtra("Price", stTicketPrice);
+                    in.putExtra("Price", str_total_price);
                     in.putExtra("road_ref", road_ref);
                     in.putExtra("stSeatAvailable", stSeatAvailable);
                     startActivity(in);
@@ -212,7 +212,7 @@ public class BookTicket extends AppCompatActivity {
         int number_of_traveller = arrayList.size();
         int Price = Integer.parseInt(stTicketPrice);
         int total_price = Price * number_of_traveller;
-        String str_total_price = Integer.toString(total_price);
+        str_total_price = Integer.toString(total_price);
         btnConfirmBooking.setText("Confirm(" + str_total_price + " Tk)");
     }
 

@@ -124,33 +124,9 @@
                 android:layout_centerInParent="true">
 
                 <Button
-                    android:id="@+id/tView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:background="@drawable/button"
-                    android:text="View"
-                    android:textAllCaps="false"
-                    android:textColor="@color/But_bg"
-                    android:textSize="20sp" />
-
-                <Button
-                    android:id="@+id/tPrint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@id/tView"
-                    android:background="@drawable/button"
-                    android:text="Print"
-                    android:textAllCaps="false"
-                    android:textColor="@color/But_bg"
-                    android:textSize="20sp" />
-
-                <Button
                     android:id="@+id/tCancel"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@id/tPrint"
                     android:background="@drawable/button"
                     android:text="Cancel"
                     android:textAllCaps="false"
