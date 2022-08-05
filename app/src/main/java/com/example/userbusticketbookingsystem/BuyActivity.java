@@ -1,22 +1,28 @@
 package com.example.userbusticketbookingsystem;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.userbusticketbookingsystem.Interface.IFirebaseLoadDone;
-import com.example.userbusticketbookingsystem.Model.IDs;
+import com.example.userbusticketbookingsystem.Model.BusModel;
+import com.example.userbusticketbookingsystem.Model.LocationModel;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,49 +32,40 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+import java.util.Objects;
 
 public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone {
+    public static String currentDate;
     SearchableSpinner searchableSpinnerdeparture;
     SearchableSpinner searchableSpinnerArrival;
-    private DatabaseReference locationref;
     IFirebaseLoadDone iFirebaseLoadDone;
-    List<IDs> iDs;
+    List<LocationModel> place;
 
-    private FirebaseUser currentuser;
-    private DatabaseReference database, loadbus;
-    private String UserId, name_set;
+    private DatabaseReference database;
+    private String name_set;
     private TextView Tx_Name, MN_Select_date;
     private Button Confirm;
     private ProgressDialog progressDialog;
-    private String dbEveryday, currentDate;
     private RecyclerView MNblload;
-    private GridLayoutManager gridLayoutManager;
     private String ArrivalAd, DepartureAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_buy);
+        setContentView(R.layout.activity_testsearch);
         Initialize();
         TextView_Name();
         FirebaseDataRetrieve();
         SpinnerGetText();
-        Confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ArrivalAd.equals(DepartureAd)) {
-                    Toast.makeText(BuyActivity.this, "Location is repeated", Toast.LENGTH_SHORT).show();
-                    MNblload.setVisibility(View.GONE);
-                } else {
-                    Searching();
-                }
+        Confirm.setOnClickListener(v -> {
+            if (ArrivalAd.equals(DepartureAd)) {
+                Toast.makeText(BuyActivity.this, "Location is repeated", Toast.LENGTH_SHORT).show();
+                MNblload.setVisibility(View.GONE);
+            } else {
+                Searching();
             }
         });
     }
@@ -76,73 +73,68 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
     @Override
     protected void onStart() {
         super.onStart();
-//        Calendar calendar = Calendar.getInstance();
-//        currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
-//        MN_Select_date.setText(currentDate);
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH);
         int year = c.get(Calendar.YEAR);
-        currentDate = day + "-" + (month+1) + "-" + year;
+        currentDate = day + "-" + (month + 1) + "-" + year;
         MN_Select_date.setText(currentDate);
     }
 
     private void Initialize() {
-        Tx_Name = (TextView) findViewById(R.id.MN_Name);
+        Tx_Name = findViewById(R.id.MN_Name);
         MN_Select_date = findViewById(R.id.MN_Select_date);
-        searchableSpinnerdeparture = (SearchableSpinner) findViewById(R.id.MN_Location_Place_Start);
+        searchableSpinnerdeparture = findViewById(R.id.MN_Location_Place_Start);
+        searchableSpinnerArrival = findViewById(R.id.MN_Location_Place_Destination);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Configuring Environment");
         progressDialog.show();
 
         //firebase
-        currentuser = FirebaseAuth.getInstance().getCurrentUser();
-        UserId = currentuser.getUid();
-        database = FirebaseDatabase.getInstance().getReference().child("Users").child(UserId);
-        searchableSpinnerArrival = findViewById(R.id.MN_Location_Place_Destination);
+        FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currentuser != null;
+        String userId = currentuser.getUid();
+        database = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
 
         Confirm = findViewById(R.id.MN_Search);
 
-        gridLayoutManager = new GridLayoutManager(this, 1, GridLayoutManager.VERTICAL, false);
-
         MNblload = findViewById(R.id.MNblload);
-        MNblload.setHasFixedSize(false);
-        MNblload.setLayoutManager(gridLayoutManager);
+        MNblload.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void TextView_Name() {
         database.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                name_set = dataSnapshot.child("Name").getValue().toString();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                name_set = Objects.requireNonNull(snapshot.child("Name").getValue()).toString();
                 Tx_Name.setText(name_set);
                 progressDialog.cancel();
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
     }
 
     private void FirebaseDataRetrieve() {
-        locationref = FirebaseDatabase.getInstance().getReference("Locations");
+        DatabaseReference locationref = FirebaseDatabase.getInstance().getReference("Locations");
         iFirebaseLoadDone = this;
         locationref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<IDs> iDs = new ArrayList<>();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<LocationModel> place = new ArrayList<>();
 
-                for (DataSnapshot idSnapShot : dataSnapshot.getChildren()) {
-                    iDs.add(idSnapShot.getValue(IDs.class));
+                for (DataSnapshot idSnapShot : snapshot.getChildren()) {
+                    place.add(idSnapShot.getValue(LocationModel.class));
                 }
-                iFirebaseLoadDone.onFirebaseLoadSuccess(iDs);
+                iFirebaseLoadDone.onFirebaseLoadSuccess(place);
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 iFirebaseLoadDone.onFirebaseLoadFailed(databaseError.getMessage());
             }
         });
@@ -152,7 +144,7 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
         searchableSpinnerdeparture.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                IDs iD = iDs.get(position);
+                LocationModel iD = place.get(position);
                 DepartureAd = iD.getPlace();
             }
 
@@ -164,7 +156,7 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
         searchableSpinnerArrival.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                IDs iD = iDs.get(position);
+                LocationModel iD = place.get(position);
                 ArrivalAd = iD.getPlace();
             }
 
@@ -175,10 +167,10 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
     }
 
     @Override
-    public void onFirebaseLoadSuccess(List<IDs> Locationlist) {
-        iDs = Locationlist;
+    public void onFirebaseLoadSuccess(List<LocationModel> Locationlist) {
+        place = Locationlist;
         List<String> id_list = new ArrayList<>();
-        for (IDs id : Locationlist) {
+        for (LocationModel id : Locationlist) {
             id_list.add(id.getPlace());
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, id_list);
             searchableSpinnerdeparture.setAdapter(adapter);
@@ -191,64 +183,67 @@ public class BuyActivity extends AppCompatActivity implements IFirebaseLoadDone 
 
     }
 
-    public void Searching() {
-            dbEveryday = DepartureAd + " " + ArrivalAd;
-            loadbus = FirebaseDatabase.getInstance().getReference().child("Schedule").child(dbEveryday);
-            FirebaseRecyclerAdapter<BusModel, loadView> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BusModel, loadView>(
-                    BusModel.class,
-                    R.layout.bus_view,
-                    loadView.class,
-                    loadbus
-            ) {
-                @Override
-                protected void populateViewHolder(final loadView viewHolder, BusModel model, int position) {
-                    final String Blid = getRef(position).getKey();
-                    loadbus.child(Blid).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            final String Destination = dataSnapshot.child("Destination").getValue().toString();
-                            final String ArrivalTime = dataSnapshot.child("ArrivalTime").getValue().toString();
-                            final String Start = dataSnapshot.child("Start").getValue().toString();
-                            final String BusNo = dataSnapshot.child("BusNo").getValue().toString();
-                            final String StartingTime = dataSnapshot.child("StartingTime").getValue().toString();
-                            final String BusType = dataSnapshot.child("BusType").getValue().toString();
-                            final String NoOfSit = dataSnapshot.child("NumberOfSeat").getValue().toString();
-                            final String Ticketprice = dataSnapshot.child("TicketPrice").getValue().toString();
+    private void Searching() {
+        String dbEveryday = DepartureAd + " " + ArrivalAd;
+        DatabaseReference query = FirebaseDatabase.getInstance().getReference().child("Schedule").child(dbEveryday);
+        FirebaseRecyclerOptions<BusModel> options = new FirebaseRecyclerOptions.Builder<BusModel>()
+                .setQuery(query, BusModel.class)
+                .build();
 
-                            viewHolder.settextBusno(BusNo);
-                            viewHolder.settextLocationEnd(ArrivalAd);
-                            viewHolder.settextLocationStart(DepartureAd);
-                            viewHolder.settextSeatType(BusType);
-                            viewHolder.settextTimeStart(StartingTime);
-                            viewHolder.setTextTimeEnd(ArrivalTime);
-                            viewHolder.settextPrice(Ticketprice);
+        FirebaseRecyclerAdapter<BusModel, BusAdapter> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BusModel, BusAdapter>(options) {
+            @NonNull
+            @Override
+            public BusAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bus_view, parent, false);
+                return new BusAdapter(view);
+            }
 
-                            viewHolder.blCard.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent in = new Intent(BuyActivity.this, BookTicket.class);
-                                    in.putExtra("ArrivalTime", ArrivalTime);
-                                    in.putExtra("StartingTime", StartingTime);
-                                    in.putExtra("BusNo", BusNo);
-                                    in.putExtra("Date", currentDate);
-                                    in.putExtra("NumberOfSeat", NoOfSit);
-                                    in.putExtra("BusType", BusType);
-                                    in.putExtra("Starting", Start);
-                                    in.putExtra("Destination", Destination);
-                                    in.putExtra("Price", Ticketprice);
-                                    startActivity(in);
-                                }
-                            });
-                        }
+            @Override
+            protected void onBindViewHolder(@NonNull BusAdapter holder, int position, @NonNull BusModel model) {
+                final String pos = getRef(position).getKey();
+                query.child(pos).addValueEventListener(new ValueEventListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        final String Destination = Objects.requireNonNull(snapshot.child("Destination").getValue()).toString();
+                        final String ArrivalTime = Objects.requireNonNull(snapshot.child("ArrivalTime").getValue()).toString();
+                        final String Start = Objects.requireNonNull(snapshot.child("Start").getValue()).toString();
+                        final String BusNo = Objects.requireNonNull(snapshot.child("BusNo").getValue()).toString();
+                        final String StartingTime = Objects.requireNonNull(snapshot.child("StartingTime").getValue()).toString();
+                        final String BusType = Objects.requireNonNull(snapshot.child("BusType").getValue()).toString();
+                        final String TicketPrice = Objects.requireNonNull(snapshot.child("TicketPrice").getValue()).toString();
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                        holder.txtArrivalTime.setText("Arrival Time :" + ArrivalTime);
+                        holder.txtBusNo.setText("Bus No :" + BusNo);
+                        holder.txtBusType.setText("Bus Type :" + BusType);
+                        holder.txtDestination.setText("Destination :" + Destination);
+                        holder.txtStart.setText("Start :" + Start);
+                        holder.txtStartingTime.setText("Start Time:" + StartingTime);
+                        holder.txtTicketPrice.setText("Tk :" + TicketPrice);
 
-                        }
-                    });
-                }
-            };
-            MNblload.setAdapter(firebaseRecyclerAdapter);
-            MNblload.setVisibility(View.VISIBLE);
+                        holder.cardView.setOnClickListener(v -> {
+                            Intent in = new Intent(BuyActivity.this, BookTicket.class);
+                            in.putExtra("ArrivalTime", ArrivalTime);
+                            in.putExtra("StartingTime", StartingTime);
+                            in.putExtra("BusNo", BusNo);
+                            in.putExtra("Date", currentDate);
+                            in.putExtra("BusType", BusType);
+                            in.putExtra("Starting", Start);
+                            in.putExtra("Destination", Destination);
+                            in.putExtra("Price", TicketPrice);
+                            startActivity(in);
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        };
+        MNblload.setAdapter(firebaseRecyclerAdapter);
+        firebaseRecyclerAdapter.startListening();
+        MNblload.setVisibility(View.VISIBLE);
     }
 }

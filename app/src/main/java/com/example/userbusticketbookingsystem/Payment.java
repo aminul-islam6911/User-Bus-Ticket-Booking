@@ -31,10 +31,12 @@ import java.util.HashMap;
 public class Payment extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private Button button;
-    private String User, timeStamp;
+    private String User;
+    private String timeStamp;
+    private String arrTostr, noOfbookedSeats;
     private Date date;
     private String stBusNo, stDate, stStarting, stDestination, stStartingTime, stArrivalTime,
-            stSeatAvailable, stBusType, stTicketPrice, seatNoRef;
+            stSeatAvailable, stBusType, stTicketPrice, road_ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +48,13 @@ public class Payment extends AppCompatActivity {
 
         GetStringFromIntent();
 
-        //Create time stamp
         date = new Date();
         timeStamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(date);
+
+        arrTostr = BookTicket.arrayList.toString();
+        int noOfSeat = BookTicket.arrayList.size();
+        noOfbookedSeats = Integer.toString(noOfSeat);
+
 
         button = findViewById(R.id.button);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -75,71 +81,55 @@ public class Payment extends AppCompatActivity {
         stArrivalTime = getIntent().getStringExtra("ArrivalTime");
         stBusType = getIntent().getStringExtra("BusType");
         stTicketPrice = getIntent().getStringExtra("Price");
-        seatNoRef = getIntent().getStringExtra("seatNoRef");
+        road_ref = getIntent().getStringExtra("road_ref");
         stSeatAvailable = getIntent().getStringExtra("stSeatAvailable");
     }
 
     private void BookTickets() {
-//Admin HashCode to store date_ref under Date
+//create date_bus_ref in Tickets --> Admin_HashCode--> date
         DatabaseReference Admin_HashCode = FirebaseDatabase.getInstance().getReference().
                 child("Tickets").child("Admin_HashCode").child(stDate);
 
-        HashMap<String, Object> H_TicketID = new HashMap<>();
-        H_TicketID.put(stDate + " " + stBusNo, "On " + stDate + " by bus no " + stBusNo);
-        Admin_HashCode.updateChildren(H_TicketID);
+        HashMap<String, Object> hashCode = new HashMap<>();
+        hashCode.put(stDate + " " + stBusNo, "On " + stDate + " by bus no " + stBusNo);
+        Admin_HashCode.updateChildren(hashCode);
+
+//create Admin Ticket in Tickets --> Admin --> date_bus_ref
+        DatabaseReference Admin_Ticket = FirebaseDatabase.getInstance().getReference()
+                .child("Tickets").child("Admin").child("On " + stDate + " by bus no " + stBusNo);
+        String a_key = Admin_Ticket.push().getKey();
+
+        HashMap<String, Object> a_map = new HashMap<>();
+        a_map.put("Start", stStarting);
+        a_map.put("Destination", stDestination);
+        a_map.put("Date", stDate);
+        a_map.put("StartingTime", stStartingTime);
+        a_map.put("ArrivalTime", stArrivalTime);
+        a_map.put("BusType", stBusType.toLowerCase());//Converting text to lower case
+        a_map.put("BusNo", stBusNo);
+        a_map.put("TicketPrice", stTicketPrice);
+        a_map.put("Name", arrTostr);
+        a_map.put("NoOfTraveller", noOfbookedSeats);
+        Admin_Ticket.child(a_key).setValue(a_map);
 
 
-//Admin Time to store time_ref under date_ref
-        DatabaseReference Admin_Time = FirebaseDatabase.getInstance().getReference()
-                .child("Tickets").child("Admin_Time").child("On " + stDate + " by bus no " + stBusNo);
+//create User Ticket in Tickets --> Users --> current_user
+        DatabaseReference User_Ticket = FirebaseDatabase.getInstance().getReference()
+                .child("Tickets").child("Users").child(User);
+        String u_key = User_Ticket.push().getKey();
 
-        HashMap<String, Object> H_Admin_Time = new HashMap<>();
-        H_Admin_Time.put(timeStamp, timeStamp);
-        Admin_Time.updateChildren(H_Admin_Time);
-
-
-//Admin_Ticket_Search to store traveller name under date_ref -> time_ref
-        DatabaseReference Admin_Ticket_Search = FirebaseDatabase.getInstance().
-                getReference().child("Tickets").child("Admin_Ticket_Search")
-                .child("On " + stDate + " by bus no " + stBusNo);
-
-        int Length = BookTicket.arrayList.size();
-        HashMap<String, Object> H_Ticket_Check_User_Admin = new HashMap<>();//Data stored in list
-        for (int a = 0; a < Length; a++) {
-            H_Ticket_Check_User_Admin.put(User + "_Traveller_" + a, BookTicket.arrayList.get(a));//Data stored in list are accessed one by one
-        }
-        Admin_Ticket_Search.child(timeStamp).updateChildren(H_Ticket_Check_User_Admin);
-
-
-//User HashCode to store date_ref under current User
-        DatabaseReference User_HashCode = FirebaseDatabase.getInstance().getReference()
-                .child("Tickets").child("User_HashCode").child(User);
-
-        HashMap<String, Object> H_Ticket_HashCode = new HashMap<>();
-        H_Ticket_HashCode.put(stDate + " " + stBusNo, "On " + stDate + " by bus no " + stBusNo);
-        User_HashCode.updateChildren(H_Ticket_HashCode);
-
-
-//User Time to store time_ref under current User -> date_ref
-        DatabaseReference User_Time = FirebaseDatabase.getInstance().getReference()
-                .child("Tickets").child("User_Time").child(User).child("On " + stDate + " by bus no " + stBusNo);
-
-        HashMap<String, Object> H_Ticket_Time = new HashMap<>();
-        H_Ticket_Time.put(timeStamp, timeStamp);
-        User_Time.updateChildren(H_Ticket_Time);
-
-
-//User_Tickets_Search to store traveller name under current User -> date_ref -> time_ref
-        DatabaseReference User_Tickets_Search = FirebaseDatabase.getInstance().
-                getReference().child("Tickets").child("User_Tickets_Search").child(User)
-                .child("On " + stDate + " by bus no " + stBusNo);
-
-        int l = BookTicket.arrayList.size();//Data stored in list
-        HashMap<String, Object> H_Ticket_User_Search = new HashMap<>();//Data stored in list are accessed one by one
-        for (int a = 0; a < l; a++) {
-            H_Ticket_User_Search.put(User + "_Traveller_" + a, BookTicket.arrayList.get(a));
-        }
-        User_Tickets_Search.child(timeStamp).updateChildren(H_Ticket_User_Search);
+        HashMap<String, Object> u_map = new HashMap<>();
+        u_map.put("Start", stStarting);
+        u_map.put("Destination", stDestination);
+        u_map.put("Date", stDate);
+        u_map.put("StartingTime", stStartingTime);
+        u_map.put("ArrivalTime", stArrivalTime);
+        u_map.put("BusType", stBusType.toLowerCase());//Converting text to lower case
+        u_map.put("BusNo", stBusNo);
+        u_map.put("TicketPrice", stTicketPrice);
+        u_map.put("Name", arrTostr);
+        u_map.put("NoOfTraveller", noOfbookedSeats);
+        User_Ticket.child(a_key).setValue(u_map);
     }
 
     private void CreatePDF() {

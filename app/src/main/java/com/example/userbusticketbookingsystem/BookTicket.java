@@ -37,7 +37,7 @@ public class BookTicket extends AppCompatActivity {
             stSeatAvailable, stBusType, stTicketPrice;
     private FirebaseUser firebaseUser;
     private DatabaseReference seatsNo, confirmTicket;
-    private String seatNoRef;
+    private String road_ref;
     int noOfSeats;
     EditText edtTraveller;
     ListView listView;
@@ -92,7 +92,7 @@ public class BookTicket extends AppCompatActivity {
                     in.putExtra("ArrivalTime", stArrivalTime);
                     in.putExtra("BusType", stBusType);
                     in.putExtra("Price", stTicketPrice);
-                    in.putExtra("seatNoRef", seatNoRef);
+                    in.putExtra("road_ref", road_ref);
                     in.putExtra("stSeatAvailable", stSeatAvailable);
                     startActivity(in);
                 } else {
@@ -127,9 +127,9 @@ public class BookTicket extends AppCompatActivity {
         stSeatAvailable = tvSeatAvailable.getText().toString();
         stBusType = getIntent().getStringExtra("BusType");
         stTicketPrice = getIntent().getStringExtra("Price");
-        seatNoRef = stStarting + " " + stDestination;
+        road_ref = stStarting + " " + stDestination;
         seatsNo = FirebaseDatabase.getInstance().getReference().child("Schedule")
-                .child(seatNoRef).child(stBusNo);
+                .child(road_ref).child(stBusNo);
     }
 
     private void SetStringToTextView(ProgressDialog configure) {
@@ -195,7 +195,6 @@ public class BookTicket extends AppCompatActivity {
                 if (noOfSeats <= 0) {
                     edtTraveller.setText("");
                     Toast.makeText(BookTicket.this, "No seats availble", Toast.LENGTH_SHORT).show();
-//                    btnAddTraveller.setClickable(false);
                 } else if (result.isEmpty()) {
                     Toast.makeText(BookTicket.this, "Add Passenger name", Toast.LENGTH_SHORT).show();
                 } else {

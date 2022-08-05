@@ -1,10 +1,13 @@
 package com.example.userbusticketbookingsystem;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,13 +15,16 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.userbusticketbookingsystem.Interface.IFirebaseLoadDone;
-import com.example.userbusticketbookingsystem.Model.IDs;
+import com.example.userbusticketbookingsystem.Model.BusModel;
+import com.example.userbusticketbookingsystem.Model.LocationModel;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,14 +37,15 @@ import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 public class BookActivity extends AppCompatActivity implements IFirebaseLoadDone, DatePickerDialog.OnDateSetListener {
     SearchableSpinner searchableSpinnerdeparture;
     SearchableSpinner searchableSpinnerArrival;
-    private DatabaseReference locationref;
     IFirebaseLoadDone iFirebaseLoadDone;
-    List<IDs> iDs;
-
+    List<LocationModel> place;
+    int day, month, year, dayfinal, monthfinal, yearfinal;
+    private DatabaseReference locationref;
     private FirebaseUser currentuser;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference database, loadbusSp;
@@ -47,7 +54,6 @@ public class BookActivity extends AppCompatActivity implements IFirebaseLoadDone
     private Button MN_Select_date, Confirm;
     private ProgressDialog progressDialog;
     private String Finaldate, dbDate;
-    int day, month, year, dayfinal, monthfinal, yearfinal;
     private RecyclerView MNblload;
     private GridLayoutManager gridLayoutManager;
     private String ArrivalAd, DepartureAd;
@@ -137,12 +143,12 @@ public class BookActivity extends AppCompatActivity implements IFirebaseLoadDone
         locationref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<IDs> iDs = new ArrayList<>();
+                List<LocationModel> place = new ArrayList<>();
 
                 for (DataSnapshot idSnapShot : dataSnapshot.getChildren()) {
-                    iDs.add(idSnapShot.getValue(IDs.class));
+                    place.add(idSnapShot.getValue(LocationModel.class));
                 }
-                iFirebaseLoadDone.onFirebaseLoadSuccess(iDs);
+                iFirebaseLoadDone.onFirebaseLoadSuccess(place);
             }
 
             @Override
@@ -156,7 +162,7 @@ public class BookActivity extends AppCompatActivity implements IFirebaseLoadDone
         searchableSpinnerdeparture.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                IDs iD = iDs.get(position);
+                LocationModel iD = place.get(position);
                 DepartureAd = iD.getPlace();
             }
 
@@ -168,7 +174,7 @@ public class BookActivity extends AppCompatActivity implements IFirebaseLoadDone
         searchableSpinnerArrival.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                IDs iD = iDs.get(position);
+                LocationModel iD = place.get(position);
                 ArrivalAd = iD.getPlace();
             }
 
@@ -179,10 +185,10 @@ public class BookActivity extends AppCompatActivity implements IFirebaseLoadDone
     }
 
     @Override
-    public void onFirebaseLoadSuccess(List<IDs> Locationlist) {
-        iDs = Locationlist;
+    public void onFirebaseLoadSuccess(List<LocationModel> Locationlist) {
+        place = Locationlist;
         List<String> id_list = new ArrayList<>();
-        for (IDs id : Locationlist) {
+        for (LocationModel id : Locationlist) {
             id_list.add(id.getPlace());
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, id_list);
             searchableSpinnerdeparture.setAdapter(adapter);
@@ -209,62 +215,66 @@ public class BookActivity extends AppCompatActivity implements IFirebaseLoadDone
             Toast.makeText(this, "Please Select Date", Toast.LENGTH_SHORT).show();
         } else {
             dbDate = DepartureAd + " " + ArrivalAd;
-            loadbusSp = FirebaseDatabase.getInstance().getReference().child("Schedule").child(dbDate);
-            FirebaseRecyclerAdapter<BusModel, loadView> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BusModel, loadView>(
-                    BusModel.class,
-                    R.layout.bus_view,
-                    loadView.class,
-                    loadbusSp
-            ) {
+            DatabaseReference query = FirebaseDatabase.getInstance().getReference().child("Schedule").child(dbDate);
+            FirebaseRecyclerOptions<BusModel> options = new FirebaseRecyclerOptions.Builder<BusModel>()
+                    .setQuery(query, BusModel.class)
+                    .build();
+
+            FirebaseRecyclerAdapter<BusModel, BusAdapter> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BusModel, BusAdapter>(options) {
+                @NonNull
                 @Override
-                protected void populateViewHolder(final loadView viewHolder, BusModel model, int position) {
-                    final String Blid = getRef(position).getKey();
-                    loadbusSp.child(Blid).addValueEventListener(new ValueEventListener() {
+                public BusAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bus_view, parent, false);
+                    return new BusAdapter(view);
+                }
+
+                @Override
+                protected void onBindViewHolder(@NonNull BusAdapter holder, int position, @NonNull BusModel model) {
+                    final String pos = getRef(position).getKey();
+                    query.child(pos).addValueEventListener(new ValueEventListener() {
+                        @SuppressLint("SetTextI18n")
                         @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            final String Destination = dataSnapshot.child("Destination").getValue().toString();
-                            final String ArrivalTime = dataSnapshot.child("ArrivalTime").getValue().toString();
-                            final String Start = dataSnapshot.child("Start").getValue().toString();
-                            final String BusNo = dataSnapshot.child("BusNo").getValue().toString();
-                            final String StartingTime = dataSnapshot.child("StartingTime").getValue().toString();
-                            final String BusType = dataSnapshot.child("BusType").getValue().toString();
-                            final String NoOfSit = dataSnapshot.child("NumberOfSeat").getValue().toString();
-                            final String Ticketprice = dataSnapshot.child("TicketPrice").getValue().toString();
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            final String Destination = Objects.requireNonNull(snapshot.child("Destination").getValue()).toString();
+                            final String ArrivalTime = Objects.requireNonNull(snapshot.child("ArrivalTime").getValue()).toString();
+                            final String Start = Objects.requireNonNull(snapshot.child("Start").getValue()).toString();
+                            final String BusNo = Objects.requireNonNull(snapshot.child("BusNo").getValue()).toString();
+                            final String StartingTime = Objects.requireNonNull(snapshot.child("StartingTime").getValue()).toString();
+                            final String BusType = Objects.requireNonNull(snapshot.child("BusType").getValue()).toString();
+                            final String TicketPrice = Objects.requireNonNull(snapshot.child("TicketPrice").getValue()).toString();
 
-                            viewHolder.settextBusno(BusNo);
-                            viewHolder.settextLocationEnd(ArrivalAd);
-                            viewHolder.settextLocationStart(DepartureAd);
-                            viewHolder.settextSeatType(BusType);
-                            viewHolder.settextTimeStart(StartingTime);
-                            viewHolder.setTextTimeEnd(ArrivalTime);
-                            viewHolder.settextPrice(Ticketprice);
+                            holder.txtArrivalTime.setText("Arrival Time :" + ArrivalTime);
+                            holder.txtBusNo.setText("Bus No :" + BusNo);
+                            holder.txtBusType.setText("Bus Type :" + BusType);
+                            holder.txtDestination.setText("Destination :" + Destination);
+                            holder.txtStart.setText("Start :" + Start);
+                            holder.txtStartingTime.setText("Start Time:" + StartingTime);
+                            holder.txtTicketPrice.setText("Tk :" + TicketPrice);
 
-                            viewHolder.blCard.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent in = new Intent(BookActivity.this, BookTicket.class);
-                                    in.putExtra("ArrivalTime", ArrivalTime);
-                                    in.putExtra("StartingTime", StartingTime);
-                                    in.putExtra("BusNo", BusNo);
-                                    in.putExtra("Date", Finaldate);
-                                    in.putExtra("NumberOfSeat", NoOfSit);
-                                    in.putExtra("BusType", BusType);
-                                    in.putExtra("Starting", Start);
-                                    in.putExtra("Destination", Destination);
-                                    in.putExtra("Price", Ticketprice);
-                                    startActivity(in);
-                                }
+                            holder.cardView.setOnClickListener(v -> {
+                                Intent in = new Intent(BookActivity.this, BookTicket.class);
+                                in.putExtra("ArrivalTime", ArrivalTime);
+                                in.putExtra("StartingTime", StartingTime);
+                                in.putExtra("BusNo", BusNo);
+                                in.putExtra("Date", Finaldate);
+                                in.putExtra("BusType", BusType);
+                                in.putExtra("Starting", Start);
+                                in.putExtra("Destination", Destination);
+                                in.putExtra("Price", TicketPrice);
+                                startActivity(in);
                             });
+
                         }
 
                         @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                        public void onCancelled(@NonNull DatabaseError error) {
 
                         }
                     });
                 }
             };
             MNblload.setAdapter(firebaseRecyclerAdapter);
+            firebaseRecyclerAdapter.startListening();
             MNblload.setVisibility(View.VISIBLE);
         }
     }

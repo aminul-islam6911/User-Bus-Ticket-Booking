@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/cDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/edit_box"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Date"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/cStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/edit_box"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Start"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/cDestination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/edit_box"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Destination"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/cBusNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/edit_box"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Bus No"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/cTraveller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/edit_box"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Total Traveller"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:backgroundTint="#E3D5D5"
+        android:padding="10dp"
+        android:text="Cancel Ticket"
+        android:textAllCaps="false"
+        android:textColor="#F44336"
+        android:textSize="25sp"
+        android:textStyle="bold"/>
+
+</LinearLayout>

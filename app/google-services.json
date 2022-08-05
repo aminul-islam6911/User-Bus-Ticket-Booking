@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "543125888785",
-    "firebase_url": "https://final-bus-ticket-booking-default-rtdb.firebaseio.com",
-    "project_id": "final-bus-ticket-booking",
-    "storage_bucket": "final-bus-ticket-booking.appspot.com"
+    "project_number": "351028530228",
+    "firebase_url": "https://bus-ticket-booking-c96b6-default-rtdb.firebaseio.com",
+    "project_id": "bus-ticket-booking-c96b6",
+    "storage_bucket": "bus-ticket-booking-c96b6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:543125888785:android:d6fd1d16c42ade8a8e76b0",
+        "mobilesdk_app_id": "1:351028530228:android:94ca8ff3166e4290ab4e61",
         "android_client_info": {
-          "package_name": "com.example.adminbusticketbookingsystem"
+          "package_name": "com.example.adminbtbs"
         }
       },
       "oauth_client": [
         {
-          "client_id": "543125888785-rql2f4ef61q4uv51pkmn9ibbprsl5tcb.apps.googleusercontent.com",
+          "client_id": "351028530228-5vtm68kf9h6r4c967va07ic2gs6725oj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDPa29N7Y_Jifbex_WsqJm5Tj982fanHoA"
+          "current_key": "AIzaSyAfoYzJLgQgfBREcjyrfUbAkoVaeTtaUbA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "543125888785-rql2f4ef61q4uv51pkmn9ibbprsl5tcb.apps.googleusercontent.com",
+              "client_id": "351028530228-5vtm68kf9h6r4c967va07ic2gs6725oj.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -37,27 +37,85 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:543125888785:android:3697cf8b5ea0400f8e76b0",
+        "mobilesdk_app_id": "1:351028530228:android:e46f1a8c545f7374ab4e61",
         "android_client_info": {
-          "package_name": "com.example.userbusticketbookingsystem"
+          "package_name": "com.example.adminbusticketbookingsystem"
         }
       },
       "oauth_client": [
         {
-          "client_id": "543125888785-rql2f4ef61q4uv51pkmn9ibbprsl5tcb.apps.googleusercontent.com",
+          "client_id": "351028530228-5vtm68kf9h6r4c967va07ic2gs6725oj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDPa29N7Y_Jifbex_WsqJm5Tj982fanHoA"
+          "current_key": "AIzaSyAfoYzJLgQgfBREcjyrfUbAkoVaeTtaUbA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "543125888785-rql2f4ef61q4uv51pkmn9ibbprsl5tcb.apps.googleusercontent.com",
+              "client_id": "351028530228-5vtm68kf9h6r4c967va07ic2gs6725oj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:351028530228:android:1e99431a05145a2aab4e61",
+        "android_client_info": {
+          "package_name": "com.example.userbtbs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "351028530228-5vtm68kf9h6r4c967va07ic2gs6725oj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfoYzJLgQgfBREcjyrfUbAkoVaeTtaUbA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "351028530228-5vtm68kf9h6r4c967va07ic2gs6725oj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:351028530228:android:480e630e9bf37b7aab4e61",
+        "android_client_info": {
+          "package_name": "com.example.userbusticketbookingsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "351028530228-5vtm68kf9h6r4c967va07ic2gs6725oj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfoYzJLgQgfBREcjyrfUbAkoVaeTtaUbA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "351028530228-5vtm68kf9h6r4c967va07ic2gs6725oj.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
