@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button btnLogin, btnSignUp;
 
-    private EditText edtEmail, edtPassword;
+    private EditText edtEmail, edtPassword, edttest;
     private ProgressDialog progressDialog;
 
     @Override
