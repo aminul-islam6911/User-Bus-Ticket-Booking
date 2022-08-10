@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class Payment extends AppCompatActivity {
+    private EditText name,mobile;
     private FirebaseUser firebaseUser;
     private Button button;
     private String User;
@@ -57,17 +59,25 @@ public class Payment extends AppCompatActivity {
 
 
         button = findViewById(R.id.button);
+        name= findViewById(R.id.name);
+        mobile= findViewById(R.id.mobile);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         User = firebaseUser.getUid();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BookTickets();
-                CreatePDF();
-                BookTicket.TimerCancel();
-                Intent intent = new Intent(Payment.this, MainActivity.class);
-                startActivity(intent);
+                String Name = name.getText().toString();
+                String Mobile = mobile.getText().toString();
+                if (!Name.isEmpty() && !Mobile.isEmpty()) {
+                    BookTickets();
+                    CreatePDF();
+                    BookTicket.TimerCancel();
+                    Intent intent = new Intent(Payment.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(Payment.this, "Please fill each box", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

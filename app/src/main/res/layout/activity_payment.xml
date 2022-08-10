@@ -3,17 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FBBB5B"
     tools:context=".Payment">
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:hint="Name"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/mobile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/name"
+        android:hint="Mobile"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="200dp"
         android:layout_height="100dp"
         android:layout_centerInParent="true"
+        android:background="@drawable/button"
+        android:layout_below="@id/mobile"
+        android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="Payment"
-        android:textSize="35sp"
+        android:textAllCaps="false"
         android:textColor="@color/But_bg"
-        android:background="@drawable/button"
-        android:textAllCaps="false" />
+        android:textSize="35sp" />
 </RelativeLayout>
